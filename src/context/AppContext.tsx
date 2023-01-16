@@ -7,18 +7,18 @@ import AudioPlayer from '../lib/audioplayer';
 const AppContext = React.createContext({} as AppContextType);
 
 export function AppContextProvider({ children }: { children: React.ReactNode }) {
-  const [collection, setCollection] = useState<Track[]>([]);
-  const [trackDetail, setTrackDetail] = useState<Track>();
-  const audioplayer = new AudioPlayer();
+  const [tracksCollection, setTracksCollection] = useState<Track[]>([]);
+  const [trackDetail, setTrackDetail] = useState<Track | null>(null);
+  const player = new AudioPlayer();
 
   return (
     <AppContext.Provider
       value={{
-        collection,
-        setCollection,
+        tracksCollection,
+        setTracksCollection,
         trackDetail,
         setTrackDetail,
-        audioplayer
+        player
       }}
     >
       {children}

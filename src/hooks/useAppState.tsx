@@ -6,7 +6,7 @@ import AppContext from '../context/AppContext';
 import logger from '../../electron/services/logger';
 
 export default function useAppState() {
-  const { collection, setCollection, trackDetail, setTrackDetail, audioplayer } = useContext(AppContext);
+  const { tracksCollection, setTracksCollection, trackDetail, setTrackDetail, player } = useContext(AppContext);
   const [isPlaying, setIsPlaying] = React.useState(false);
 
   const onOpenFolder = React.useCallback(async () => {
@@ -15,8 +15,8 @@ export default function useAppState() {
     if (!newTracks) return;
     logger.info('new tracks:', newTracks.length);
 
-    setCollection(newTracks);
-  }, [setCollection]);
+    setTracksCollection(newTracks);
+  }, [setTracksCollection]);
 
   const closeDetail = React.useCallback(() => {
     setTrackDetail(undefined);
@@ -27,23 +27,31 @@ export default function useAppState() {
       logger.info('track update', track);
 
       window.Main.PersistTrack(track);
-      const filtered = collection.filter(t => t.id !== track.id);
+      const filtered = tracksCollection.filter((t) => t.id !== track.id);
       const allTracks = [...filtered, track];
-      setCollection(allTracks);
+      setTracksCollection(allTracks);
       if (trackDetail === track) {
         closeDetail();
       }
     },
-    [collection, setCollection, trackDetail, closeDetail]
+    [tracksCollection, setTracksCollection, trackDetail, closeDetail]
   );
 
   const tracksFixedHandler = React.useCallback(
     (fixedTracks: Track[]) => {
-      const filtered = collection.filter(t => fixedTracks.includes(t) === false);
-      const allTracks = filtered.concat(fixedTracks);
-      setCollection(allTracks);
+      logger.info('total fixed tracks: ', fixedTracks.length);
+      logger.info('collection size: ', tracksCollection.length);
+      logger.info('filtered tracks: ', filtered.length);
+      const allTracks = tracksCollection.map((t) => {
+        if (fixedTracks.includes((f) => f.id === t.id)) {
+          return f;
+        }
+        return t;
+      });
+      logger.info('allTracks: ', allTracks.length);
+      setTracksCollection(allTracks);
     },
-    [collection]
+    [tracksCollection, setTracksCollection]
   );
 
   const showCtxMenu = React.useCallback(
@@ -54,32 +62,32 @@ export default function useAppState() {
     [window]
   );
 
-  const onFixAllTracks = React.useCallback(() => window.Main.FixTracks(collection), [collection]);
+  const onFixAllTracks = React.useCallback(() => window.Main.FixTracks(TracksCollection), [tracksCollection]);
 
   const playTrack = React.useCallback(
     (t: Track) => {
       logger.info('track to play:', t);
-      audioplayer.setTrack(t);
-      audioplayer.play();
+      player.setTrack(t);
+      player.play();
       setIsPlaying(true);
     },
-    [audioplayer]
+    [player]
   );
 
   const togglePlayPause = React.useCallback(() => {
-    if (audioplayer.isPaused()) {
-      audioplayer.play();
+    if (player.isPaused()) {
+      player.play();
       setIsPlaying(true);
     }
-    audioplayer.pause();
+    player.pause();
     setIsPlaying(false);
-  }, [audioplayer]);
+  }, [player]);
 
   return {
-    collection,
-    setCollection, // TODO: FIXME
+    tracksCollection,
+    setTracksCollection, // TODO: FIXME
     tracksFixedHandler,
-    audioplayer,
+    player,
     isPlaying,
     playTrack,
     togglePlayPause,

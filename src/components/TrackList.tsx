@@ -10,11 +10,11 @@ import {
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Track, TrackId } from '../../electron/types/emusik';
+import { Track } from '../../electron/types/emusik';
 import useAppState from '../hooks/useAppState';
 
 const TrackList = () => {
-  const { collection, playTrack, showCtxMenu } = useAppState();
+  const { tracksCollection, playTrack, showCtxMenu } = useAppState();
   const gridRef = useRef<AgGridReact>(null);
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const [rowData, setRowData] = useState<Track[]>([]);
@@ -47,13 +47,13 @@ const TrackList = () => {
   }, []);
 
   useEffect(() => {
-    setRowData(collection);
-  }, [collection]);
+    setRowData(tracksCollection);
+  }, [tracksCollection]);
 
   const onGridReady = (params: GridReadyEvent) => {
     setGridApi(params.api);
 
-    setRowData(collection);
+    setRowData(tracksCollection);
   };
 
   const onDblClick = useCallback(
