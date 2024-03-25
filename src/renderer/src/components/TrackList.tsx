@@ -46,12 +46,17 @@ export const TrackList: FC = () => {
   return (
     <Table
       isStriped
+      isHeaderSticky
       selectionMode="multiple"
       selectionBehavior="replace"
       selectedKeys={selectedKeys}
+      color="primary"
       onSelectionChange={setSelectedKeys}
       onRowAction={(key) => playTrackHandler(key)}
       aria-label="Example table with dynamic content"
+      classNames={{
+        base: "max-h-[520px] overflow-scroll",
+      }}
     >
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
