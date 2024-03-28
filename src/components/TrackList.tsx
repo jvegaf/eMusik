@@ -98,9 +98,10 @@ export function TrackList() {
     id: MENU_ID,
   });
 
-  const displayMenu = (event: MouseEvent) => {
+  const displayMenu = (event: MouseEvent, props) => {
     show({
       event,
+      props,
     });
   };
 
@@ -116,6 +117,8 @@ export function TrackList() {
   useEffect(() => {
     console.log('trackList: playingTrack', playingTrack);
   }, [playingTrack]);
+
+  const isPlayable = Object.keys(rowSelection).length < 2;
 
   const table = useMantineReactTable({
     columns,
@@ -144,7 +147,7 @@ export function TrackList() {
       },
       onContextMenu: (event: MouseEvent) => {
         // event.preventDefault();
-        displayMenu(event);
+        displayMenu(event, {row});
       },
     }),
     state: {rowSelection},
@@ -154,7 +157,12 @@ export function TrackList() {
     <div className={classes.trackList}>
       <MantineReactTable table={table} />
       <Menu id={MENU_ID}>
-        <Item onClick={playTrackHandler}>Item 1</Item>
+        <Item
+          disabled={!isPlayable}
+          onClick={({props}) => playTrackHandler(props.row)}
+        >
+          Play Track
+        </Item>
         <Item onClick={playTrackHandler}>Item 2</Item>
         <Separator />
         <Item disabled>Disabled</Item>
