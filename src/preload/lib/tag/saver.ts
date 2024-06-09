@@ -18,7 +18,7 @@ const PersistTrack = (track: Track, artwork?: Artwork) => {
     key,
   } as NodeId3.Tags;
 
-  NodeId3.Promise.update(tags, track.path)
+  NodeId3.Promise.update(tags, track.filepath)
     .then(() => log.info(`track persisted: ${track.title}`))
     .catch(reason => log.error('track persist error', reason));
 };

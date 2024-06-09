@@ -23,7 +23,7 @@ const useAppStore = create<AppState>(set => ({
   },
   updateHeight: (height: number) => set({ contentHeight: height - (APPBAR_HEIGHT + STATUSBAR_HEIGHT) }),
   getArtImage: async (track: Track) => {
-    const art = await window.Main.getArtWork(track.path);
+    const art = await window.Main.getArtWork(track.filepath);
     return art;
   },
 }));

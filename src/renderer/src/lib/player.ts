@@ -92,7 +92,7 @@ class Player {
 
   setTrack(track: Track) {
     this.track = track;
-    this.audio.src = `file://${track.path}`;
+    this.audio.src = `file://${track.filepath}`;
 
     // When we change song, need to update the thresholdReached indicator.
     this.durationThresholdReached = false;

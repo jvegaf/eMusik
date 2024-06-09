@@ -1,5 +1,4 @@
 import path from 'path';
-import { randomUUID } from 'node:crypto';
 import LoadTagsFromFile from '../tag/mm-loader';
 import log from 'electron-log/main';
 import { ParseDuration, Sanitize } from '../../utils';
@@ -28,9 +27,7 @@ const CreateTrack = async (file: string): Promise<Track | null> => {
     return null;
   }
 
-  const trackId = randomUUID();
   const track: Track = {
-    id: trackId,
     album: tags.album,
     artist: tags.artist,
     bpm: tags.bpm,
@@ -38,7 +35,7 @@ const CreateTrack = async (file: string): Promise<Track | null> => {
     key: tags.key,
     duration: tags.duration,
     time: tags.duration ? ParseDuration(tags.duration) : undefined,
-    path: file,
+    filepath: file,
     title: GetTrackTitle(tags.title, file),
     year: tags.year,
     bitrate: tags.bitrate ? tags.bitrate / 1000 : undefined,

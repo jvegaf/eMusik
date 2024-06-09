@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+model Track {
+  id        Int            @id @default(autoincrement())
+  title     String?
+  filepath  String         @unique
+  playlists PlaylistItem[]
+
+  artistEntry      Artist  @relation(name: "artist", fields: [artist], references: [name]) /// The database entry for the track's artist
+  artist           String /// The id of the track's artist
+  albumartistEntry Artist? @relation(name: "albumartist", fields: [albumartist], references: [name]) /// The database entry for the track's album artist
+  albumartist      String? /// The id of the track's album artist
+  albumEntry       Album   @relation(name: "album", fields: [albumID, album], references: [id, name]) /// The database entry for the track's album
+  albumID          Int /// The id of the album
+  album            String /// The name of the album
+  year    Int?
+  date    String?
+  genre           String? /// Stringified JSON Array
+  bpm             Int?
+  key             String?
+  category        String? /// Stringified JSON Array
+  duration         Int?
+  bitrate          Int?
+
+  type String @default("track") /// ###DO NOT SET THIS. This is is used to provide a discriminating union for typescript.
+}
+
+model Album {
+  id          Int     @id @default(autoincrement())
+  name        String
+  artistEntry Artist  @relation(fields: [artist], references: [name], onDelete: Cascade) /// The database entry for the albums artist
+  artist      String /// The id of the albums artist
+  tracks      Track[] @relation(name: "album")
+  cover       String? /// The filepath of the albums cover
+
+  type String @default("album") /// ###DO NOT SET THIS. This is is used to provide a discriminating union for typescript.
+
+  @@unique([name, artist])
+  @@unique([name, id]) // This is used to provide the name and id to the Track record, as otherwise linking it would not work or would require a lot of manual runtime mapping.
+}
+
+model Artist {
+  name              String  @id
+  tracks            Track[] @relation(name: "artist")
+  albumartistTracks Track[] @relation(name: "albumartist")
+  albums            Album[]
+
+  type String @default("artist") /// ###DO NOT SET THIS. This is is used to provide a discriminating union for typescript.
+}
+
+model Playlist {
+  id          Int            @id @default(autoincrement())
+  name        String /// The name of the playlist. Does not need to be unique
+  items       PlaylistItem[] /// Those contain the tracks and their associated index in the playlist
+  description String? /// The description of the playlist, which gets displayed under its name
+
+  type String @default("playlist") /// ###DO NOT SET THIS. This is is used to provide a discriminating union for typescript.
+}
+
+/// A playlist contains tracks, but it can contain multiple of the same and needs to know their position inside the playlist. Thus we have another type for the playlist items.
+model PlaylistItem {
+  id    Int   @id @default(autoincrement())
+  track Track @relation(fields: [trackID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  index Int
+
+  playlist Playlist @relation(fields: [playlistID], references: [id], onDelete: Cascade)
+
+  trackID    Int
+  playlistID Int
+
+  type String @default("playlistItem") /// ###DO NOT SET THIS. This is is used to provide a discriminating union for typescript.
+}

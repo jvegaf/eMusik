@@ -115,6 +115,6 @@ export async function InitIpc(): Promise<void> {
   });
 
   ipcMain.on(REMOVE_TRACK, (_, track: Track) => {
-    removeFile(track.path);
+    removeFile(track.filepath);
   });
 }
