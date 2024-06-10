@@ -1,7 +1,9 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, shell } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 import { OPEN_FOLDER, FIX_TRACK, PERSIST, GET_ARTWORK, REMOVE_TRACK, OPEN_FILES } from './channels';
 import { ArtTrack, Artwork, Track, TrackSrc } from './emusik';
+import { parseUri } from './utils-uri';
+import db from './db';
 
 declare global {
   interface Window {
@@ -14,13 +16,17 @@ declare global {
 const api = {
   openFolder: async () => ipcRenderer.invoke(OPEN_FOLDER),
   openFiles: async (files: TrackSrc[]) => ipcRenderer.invoke(OPEN_FILES, files),
-  fixTrack: (track: Track) => ipcRenderer.send(FIX_TRACK, track),
-  persistTrack: (track: Track) => ipcRenderer.send(PERSIST, track),
   log: (...args: any[]) => ipcRenderer.send('log', ...args),
-  findArtWork: async (track: Track) => ipcRenderer.invoke('find-artwork', track),
-  saveArtWork: (artTrack: ArtTrack) => ipcRenderer.send('save-artwork', artTrack),
-  getArtWork: async (filepath: TrackSrc): Promise<Artwork | null> => ipcRenderer.invoke(GET_ARTWORK, filepath),
-  removeTrack: (filepath: TrackSrc) => ipcRenderer.send(REMOVE_TRACK, filepath),
+  artwork: {
+    find: async (track: Track) => ipcRenderer.invoke('find-artwork', track),
+    save: (artTrack: ArtTrack) => ipcRenderer.send('save-artwork', artTrack),
+    get: async (filepath: TrackSrc): Promise<Artwork | null> => ipcRenderer.invoke(GET_ARTWORK, filepath),
+  },
+  track: {
+    fix: (track: Track) => ipcRenderer.send(FIX_TRACK, track),
+    persist: (track: Track) => ipcRenderer.send(PERSIST, track),
+    remove: (filepath: TrackSrc) => ipcRenderer.send(REMOVE_TRACK, filepath),
+  },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   on(channel: string, func: (...args: any[]) => void) {
     ipcRenderer.on(channel, (_event, ...args) => func(...args));
@@ -28,6 +34,11 @@ const api = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   once(channel: string, func: (...args: any[]) => void) {
     ipcRenderer.once(channel, (_event, ...args) => func(...args));
+  },
+  db,
+  library: {
+    showTrackInFolder: (track: Track) => shell.showItemInFolder(track.path),
+    parseUri,
   },
 };
 

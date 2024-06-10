@@ -46,6 +46,13 @@ export interface Playlist {
   tracks: string[];
 }
 
+/**
+ * Database schemes
+ */
+export type TrackModel = PouchDB.Core.ExistingDocument<Track & PouchDB.Core.AllDocsMeta>;
+
+export type PlaylistModel = PouchDB.Core.ExistingDocument<Playlist & PouchDB.Core.AllDocsMeta>;
+
 export interface MatchResult {
   tag: ResultTag;
   trackTokens: string[];
