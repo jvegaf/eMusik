@@ -3,12 +3,15 @@ import log from 'electron-log/renderer';
 import { Track, TrackId } from 'src/preload/emusik';
 import { FileWithPath } from '@mantine/dropzone';
 import useAppStore from './useAppStore';
+import { stripAccents } from '@preload/utils-id3';
 
 type LibraryState = {
+  search: string;
   tracks: Track[];
   sorted: Track[];
   isSorted: boolean;
   api: {
+    search: (value: string) => void;
     sort: (tracks: Track[]) => void;
     add: (track: Track) => void;
     update: (track: Track) => void;
@@ -22,10 +25,17 @@ type LibraryState = {
 };
 
 const useLibraryStore = create<LibraryState>(set => ({
+  search: '',
   tracks: [],
   sorted: [],
   isSorted: false,
   api: {
+    /**
+     * Filter tracks by search
+     */
+    search: (search): void => {
+      set({ search: stripAccents(search) });
+    },
     sort: sorted => set({ sorted, isSorted: true }),
     add: track => set(state => ({ tracks: [...state.tracks, track] })),
     update: track => {
