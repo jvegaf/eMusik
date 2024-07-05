@@ -5,6 +5,7 @@ import { useViewportSize } from '@mantine/hooks';
 import { useEffect } from 'react';
 import useAppStore from '../stores/useAppStore';
 import Sidebar from '@renderer/components/Sidebar';
+import TopBar from '@renderer/components/TopBar';
 
 export function RootLayout() {
   const { height } = useViewportSize();
@@ -18,7 +19,10 @@ export function RootLayout() {
     <div className={classes.rlayout}>
       <main className={classes.mainContainer}>
         <Sidebar />
-        <Outlet />
+        <div className={classes.mainContent}>
+          <TopBar />
+          <Outlet />
+        </div>
       </main>
       <div className={classes.player}>
         <Player />

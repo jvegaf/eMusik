@@ -13,7 +13,7 @@ const PlayerDisplay = (props: PlayerDisplayProps) => {
     <div className={classes.playerDisplayRoot}>
       <div className={classes.playerDisplayImage}>
         <Image
-          h={80}
+          h={70}
           src={props.artSrc}
           fallbackSrc={PlaceHolder}
         />
@@ -22,13 +22,12 @@ const PlayerDisplay = (props: PlayerDisplayProps) => {
         <Text
           size='md'
           fw={700}
+          truncate="end"
         >
-          {/* {props.title} */}
-          One More Time
+          {props.title}
         </Text>
-        <Text size='sm'>
-          {/* {props.artist} */}
-          Daft Punk
+        <Text truncate="end" size='sm'>
+          {props.artist}
         </Text>
       </div>
     </div>
