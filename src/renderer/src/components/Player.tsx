@@ -6,7 +6,6 @@ import usePlayerStore from '@renderer/stores/usePlayerStore';
 import { Track } from '@preload/emusik';
 import useAppStore from '@renderer/stores/useAppStore';
 import useLibraryStore from '@renderer/stores/useLibraryStore';
-import { externalizeDepsPlugin } from 'electron-vite';
 
 export default function Player() {
   const [artist, setArtist] = useState('');
