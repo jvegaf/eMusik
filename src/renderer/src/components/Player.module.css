@@ -1,9 +1,13 @@
 .header {
   height: 100%;
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  @mixin light {
+    background-color: var(--appbar-bg-light);
+  }
   margin: 0;
   padding: 0;
-  background-color: var(--mantine-color-body);
+  /* background-color: var(--mantine-color-body); */
   border-top: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
 }
