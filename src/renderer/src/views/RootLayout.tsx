@@ -1,10 +1,10 @@
-import AppBar from '../components/AppBar';
+import Player from '../components/Player';
 import { Outlet } from 'react-router-dom';
 import classes from './RootLayout.module.css';
 import { useViewportSize } from '@mantine/hooks';
 import { useEffect } from 'react';
 import useAppStore from '../stores/useAppStore';
-import { StatusBar } from '@renderer/components/StatusBar';
+import Sidebar from '@renderer/components/Sidebar';
 
 export function RootLayout() {
   const { height } = useViewportSize();
@@ -16,14 +16,12 @@ export function RootLayout() {
 
   return (
     <div className={classes.rlayout}>
-      <div className={classes.topbar}>
-        <AppBar />
-      </div>
       <main className={classes.mainContainer}>
+        <Sidebar />
         <Outlet />
       </main>
-      <div className={classes.footer}>
-        <StatusBar />
+      <div className={classes.player}>
+        <Player />
       </div>
     </div>
   );

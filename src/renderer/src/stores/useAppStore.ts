@@ -10,7 +10,7 @@ interface AppState {
   getArtImage: (track: Track) => Promise<Artwork | null>;
 }
 
-const APPBAR_HEIGHT = 80;
+const APPBAR_HEIGHT = 40;
 const STATUSBAR_HEIGHT = 30;
 
 const useAppStore = create<AppState>(set => ({

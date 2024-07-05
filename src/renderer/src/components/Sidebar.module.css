@@ -1,0 +1,31 @@
+.sbContainer {
+  width: 300px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #E5E5E5;
+  border-right: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
+}
+
+.sbHeader {
+  width: 100%;
+  height: 70px;
+  background-color: #F1F1F1;
+  border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--mantine-font-size-md);
+  font-weight: var(--mantine-font-weight-bold);
+}
+
+.mainLinkInner {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.mainLinkIcon {
+  margin-right: var(--mantine-spacing-sm);
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+}
