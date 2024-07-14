@@ -3,14 +3,18 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #E5E5E5;
+  @mixin light {
+    background-color: var(--appbar-bg-light);
+  }
   border-right: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
 }
 
 .sbHeader {
   width: 100%;
   height: 70px;
-  background-color: #F1F1F1;
+  @mixin light {
+    background-color: var(--appbar-bg-light);
+  }
   border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
   display: flex;
   justify-content: center;

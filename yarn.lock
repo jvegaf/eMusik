@@ -1423,6 +1423,11 @@
     "@types/babel__core" "^7.20.5"
     react-refresh "^0.14.0"
 
+"@wavesurfer/react@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@wavesurfer/react/-/react-1.0.7.tgz#5bbb8fe8080f4478e896a32eeeb5ed111bbc4266"
+  integrity sha512-Bw2rd2zqVL1ERy8N9mciacbQW3N5Gn9oRjhq3kjqgtLeE8a1WSTU+4kU0E37541jf432eNZ8lNzuodFFSiNccw==
+
 "@xmldom/xmldom@^0.8.8":
   version "0.8.10"
   resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.8.10.tgz#a1337ca426aa61cef9fe15b5b28e340a72f6fa99"
@@ -5229,6 +5234,11 @@ vite@^5.0.11:
     rollup "^4.13.0"
   optionalDependencies:
     fsevents "~2.3.3"
+
+wavesurfer.js@^7.8.1:
+  version "7.8.1"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.8.1.tgz#5b2c315c5ffeb42a142a621a1cc422017db72f68"
+  integrity sha512-KMebCPZF7jjo1/B+G7JGJgQc7hshIhJLnM/gUi4pdyCwb89s4apivpVZY2kdvausqbm+ceeudvKGPBcR9uqXnQ==
 
 which-boxed-primitive@^1.0.2:
   version "1.0.2"

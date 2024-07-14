@@ -2,7 +2,7 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import 'mantine-react-table/styles.css';
 import type { MouseEvent } from 'react';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import useLibraryStore from '../stores/useLibraryStore';
 import usePlayerStore from '../stores/usePlayerStore';
 import {
@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import 'react-contexify/dist/ReactContexify.css';
 import { modals } from '@mantine/modals';
 import { Text } from '@mantine/core';
+import { WaveformCell } from './WaveformCell';
 
 const MENU_ID = 'menu-id';
 
@@ -37,12 +38,24 @@ export function TrackList() {
   const contentHeight = useAppStore(state => state.contentHeight);
   const [sortedIndex, setSortedIndex] = useState<number>(0);
   const colorScheme = document.querySelector('html')!.getAttribute('data-mantine-color-scheme');
+  const cellRef = useRef<HTMLDivElement>(null);
 
   const columns = useMemo<MRT_ColumnDef<Track>[]>(
     () => [
       {
         accessorKey: 'title', //access nested data with dot notation
         header: 'Title',
+      },
+      {
+        accessorKey: 'path',
+        header: 'Waveform',
+        Cell: ({ cell, row }) => {
+          <WaveformCell
+            url={row.original.path}
+            wfRef={cellRef}
+          />;
+        },
+        enableSorting: false,
       },
       {
         accessorKey: 'artist',
