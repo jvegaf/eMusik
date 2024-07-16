@@ -1,29 +1,35 @@
-import { useWavesurfer } from '@wavesurfer/react';
-import React, { useEffect } from 'react';
+import { useWavesurfer } from '../hooks/useWavesurfer';
+import { useEffect, useRef } from 'react';
 
-type WaveformCellProps = {
-  url: string;
-  wfRef: React.RefObject<HTMLDivElement>;
-};
-export const WaveformCell: React.FC<WaveformCellProps> = ({ url, wfRef }) => {
-  const { wavesurfer } = useWavesurfer({
-    container: wfRef,
-    height: 30,
-    waveColor: 'rgb(200, 0, 200)',
-    progressColor: 'rgb(100, 0, 100)',
-    url: url,
-    barWidth: 2,
-    barGap: 1,
-    barRadius: 2,
-  });
+// type WaveformCellProps = {
+//   url: string;
 
+// };
+
+export const WaveformCell: React.FC = props => {
+  const containerRef = useRef();
+  const wavesurfer = useWavesurfer(containerRef, props);
+
+  // Initialize wavesurfer when the container mounts
+  // or any of the props change
   useEffect(() => {
-    if (wavesurfer) {
-      wavesurfer.once('interaction', () => {
-        wavesurfer.play();
-      });
-    }
+    if (!wavesurfer) return;
+
+    const subscriptions = [
+      wavesurfer.on('interaction', () => {
+        wavesurfer.playPause();
+      }),
+    ];
+
+    return () => {
+      subscriptions.forEach(unsub => unsub());
+    };
   }, [wavesurfer]);
 
-  return <div ref={wfRef} />;
+  return (
+    <div
+      ref={containerRef}
+      style={{ minWidth: '200px' }}
+    />
+  );
 };

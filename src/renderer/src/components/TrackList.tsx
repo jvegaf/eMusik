@@ -2,7 +2,7 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import 'mantine-react-table/styles.css';
 import type { MouseEvent } from 'react';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import useLibraryStore from '../stores/useLibraryStore';
 import usePlayerStore from '../stores/usePlayerStore';
 import {
@@ -38,7 +38,6 @@ export function TrackList() {
   const contentHeight = useAppStore(state => state.contentHeight);
   const [sortedIndex, setSortedIndex] = useState<number>(0);
   const colorScheme = document.querySelector('html')!.getAttribute('data-mantine-color-scheme');
-  const cellRef = useRef<HTMLDivElement>(null);
 
   const columns = useMemo<MRT_ColumnDef<Track>[]>(
     () => [
@@ -49,12 +48,12 @@ export function TrackList() {
       {
         accessorKey: 'path',
         header: 'Waveform',
-        Cell: ({ cell, row }) => {
+        size: 200,
+        Cell: ({ row }) => (
           <WaveformCell
-            url={row.original.path}
-            wfRef={cellRef}
-          />;
-        },
+            url={`file://${row.original.path}`}
+          />
+        ),
         enableSorting: false,
       },
       {
@@ -195,10 +194,11 @@ export function TrackList() {
     enableRowVirtualization: true,
     enableSorting: true,
     mantineTableContainerProps: { style: { height: contentHeight } },
+    memoMode: 'rows',
 
     getRowId: row => row.id,
     mantineTableBodyRowProps: ({ row }) => ({
-      onClick: event => handleSelection(event, row),
+      // onClick: event => handleSelection(event, row),
       onContextMenu: (event: MouseEvent) => {
         if (Object.keys(rowSelection).length < 2)
           setRowSelection(prev => ({
@@ -211,7 +211,10 @@ export function TrackList() {
         backgroundColor: isPlaying(row.id),
       },
     }),
-    mantineTableBodyCellProps: { style: { userSelect: 'none', backgroundColor: 'transparent' } },
+    mantineTableBodyCellProps: ({ cell }) => ({
+      // onClick: event => handleSelection(event, row),
+      style: { userSelect: 'none', backgroundColor: 'transparent' },
+    }),
     state: {
       rowSelection,
       density: 'xs',
