@@ -46,14 +46,10 @@ export function TrackList() {
         header: 'Title',
       },
       {
-        accessorKey: 'path',
+        // accessorKey: 'path',
         header: 'Waveform',
         size: 200,
-        Cell: ({ row }) => (
-          <WaveformCell
-            url={`file://${row.original.path}`}
-          />
-        ),
+        Cell: ({ row }) => <WaveformCell track={row.original} />,
         enableSorting: false,
       },
       {
