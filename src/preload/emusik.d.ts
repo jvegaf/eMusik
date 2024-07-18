@@ -25,7 +25,7 @@ export interface Track {
   title: string;
   year?: number;
   bitrate?: number;
-  peaks?: number[];
+  peaks?: number[][];
 }
 
 export interface ResultTag {

@@ -11,32 +11,6 @@ export const useWavesurfer = (containerRef, track) => {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    if (!track.peaks) {
-      const ws = WaveSurfer.create({
-        url: `file://${track.path}`,
-        container: containerRef.current,
-        barWidth: 2,
-        barGap: 1,
-        barRadius: 2,
-        waveColor: 'rgb(200, 0, 200)',
-        progressColor: 'rgb(100, 0, 100)',
-        height: 20,
-      });
-
-      console.log('generando peaks', track.path);
-
-      ws.on('ready', () => {
-        track.peaks = ws.exportPeaks({ channels: 1 });
-        track.duration = ws.getDuration();
-        updateTrack(track);
-      });
-
-      setWavesurfer(ws);
-      return;
-    }
-
-    console.log('cargando peaks', track.path);
-
     const ws = WaveSurfer.create({
       url: `file://${track.path}`,
       container: containerRef.current,
@@ -46,9 +20,24 @@ export const useWavesurfer = (containerRef, track) => {
       waveColor: 'rgb(200, 0, 200)',
       progressColor: 'rgb(100, 0, 100)',
       height: 20,
+    });
+    if (!track.peaks) {
+
+      console.log('generando peaks', track.path);
+
+      ws.on('ready', () => {
+        track.peaks = ws.exportPeaks({ channels: 1 });
+        track.duration = ws.getDuration();
+        updateTrack(track);
+      });
+    }
+
+    console.log('cargando peaks', track.path);
+
+    ws.setOptions({
       peaks: track.peaks,
       duration: track.duration,
-    });
+    })
 
     setWavesurfer(ws);
 
