@@ -156,20 +156,9 @@ export function TrackList() {
   };
 
   useEffect(() => {
-    console.log('isSorted', isSorted);
-    if (isSorted) {
-      console.log('first track', sorted[0].original.title);
-    }
-  }, [isSorted, sorted]);
-
-  useEffect(() => {
     document.addEventListener('keydown', e => handleKeyPress(e));
     return () => document.removeEventListener('keydown', e => handleKeyPress(e));
   }, []);
-
-  useEffect(() => {
-    console.log('colorScheme:', colorScheme);
-  }, [colorScheme]);
 
   const isPlayable = Object.keys(rowSelection).length < 2;
 
@@ -194,7 +183,7 @@ export function TrackList() {
 
     getRowId: row => row.id,
     mantineTableBodyRowProps: ({ row }) => ({
-      // onClick: event => handleSelection(event, row),
+      onClick: event => handleSelection(event, row),
       onContextMenu: (event: MouseEvent) => {
         if (Object.keys(rowSelection).length < 2)
           setRowSelection(prev => ({
@@ -207,10 +196,9 @@ export function TrackList() {
         backgroundColor: isPlaying(row.id),
       },
     }),
-    mantineTableBodyCellProps: ({ cell }) => ({
-      // onClick: event => handleSelection(event, row),
+    mantineTableBodyCellProps: {
       style: { userSelect: 'none', backgroundColor: 'transparent' },
-    }),
+    },
     state: {
       rowSelection,
       density: 'xs',
