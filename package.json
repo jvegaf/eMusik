@@ -37,6 +37,8 @@
     "@radix-ui/react-slider": "^1.1.2",
     "@tabler/icons-react": "^2.47.0",
     "@wavesurfer/react": "^1.0.7",
+    "ag-grid-community": "^32.0.2",
+    "ag-grid-react": "^32.0.2",
     "async-g-i-s": "^1.5.2",
     "axios": "^1.6.8",
     "clsx": "^2.1.0",

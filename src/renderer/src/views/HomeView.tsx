@@ -1,10 +1,10 @@
-import { TrackList } from '../components/TrackList';
+import { TracksTable } from '@renderer/components/TracksTable';
 import classes from './HomeView.module.css';
 
 export function HomeView() {
   return (
     <div className={classes.homeview_container}>
-      <TrackList />
+      <TracksTable />
     </div>
   );
 }
