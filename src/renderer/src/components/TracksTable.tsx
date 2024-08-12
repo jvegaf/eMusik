@@ -1,5 +1,5 @@
 import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { Track } from '@preload/emusik';
 import useLibraryStore from '@renderer/stores/useLibraryStore';
 import useAppStore from '@renderer/stores/useAppStore';
@@ -21,12 +21,15 @@ export const TracksTable = () => {
   const tracks = useLibraryStore(state => state.tracks);
   const gridRef = useRef<AgGridReact>(null);
   const contentHeight = useAppStore(state => state.contentHeight);
+  const showContextMenu = useAppStore(state => state.showContextMenu);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const [rowData, setRowData] = useState<Track[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [colDefs, setColDefs] = useState([
     { field: 'title', minWidth: 150 },
     { field: 'artist', minWidth: 90 },
-    { field: 'time', maxWidth: 70 },
+    { field: 'time', maxWidth: 90 },
     { field: 'album', minWidth: 90 },
     { field: 'genre', minWidth: 70 },
     { field: 'year', maxWidth: 70 },
@@ -79,13 +82,14 @@ export const TracksTable = () => {
 
     const selected = event.api.getSelectedRows() as Track[];
     console.log('selected', selected);
+    showContextMenu(selected);
     // showCtxMenu(selected);
   }, []);
 
   return (
     <div
       style={gridStyle}
-      className='ag-theme-alpine'
+      className='ag-theme-alpine-auto-dark'
     >
       <AgGridReact
         ref={gridRef}

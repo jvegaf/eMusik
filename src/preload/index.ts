@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
-import { OPEN_FOLDER, FIX_TRACK, PERSIST, GET_ARTWORK, REMOVE_TRACK, OPEN_FILES } from './channels';
+import { OPEN_FOLDER, FIX_TRACK, PERSIST, GET_ARTWORK, REMOVE_TRACK, OPEN_FILES, SHOW_CONTEXT_MENU } from './channels';
 import { ArtTrack, Artwork, Track, TrackSrc } from './emusik';
 
 declare global {
@@ -21,6 +21,8 @@ const api = {
   saveArtWork: (artTrack: ArtTrack) => ipcRenderer.send('save-artwork', artTrack),
   getArtWork: async (filepath: TrackSrc): Promise<Artwork | null> => ipcRenderer.invoke(GET_ARTWORK, filepath),
   removeTrack: (filepath: TrackSrc) => ipcRenderer.send(REMOVE_TRACK, filepath),
+  showContextMenu: (selected: Track[]) => ipcRenderer.send(SHOW_CONTEXT_MENU, selected),
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   on(channel: string, func: (...args: any[]) => void) {
     ipcRenderer.on(channel, (_event, ...args) => func(...args));

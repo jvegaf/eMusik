@@ -8,6 +8,7 @@ interface AppState {
   updateMessage: (message: string) => void;
   updateHeight: (height: number) => void;
   getArtImage: (track: Track) => Promise<Artwork | null>;
+  showContextMenu: (selected: Track[]) => void;
 }
 
 const APPBAR_HEIGHT = 70;
@@ -26,6 +27,7 @@ const useAppStore = create<AppState>(set => ({
     const art = await window.Main.getArtWork(track.path);
     return art;
   },
+  showContextMenu: (selected: Track[]) => window.Main.showContextMenu(selected),
 }));
 
 export default useAppStore;
