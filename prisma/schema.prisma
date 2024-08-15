@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Track {
+  id           Int            @id @default(autoincrement())
+  title        String?
+  filepath     String         @unique
+  Album        Album?         @relation(fields: [albumId], references: [id])
+  albumId      Int?
+  Artist       Artist?        @relation(fields: [artistName], references: [name])
+  artistName   String?
+  Cover        Cover?         @relation(fields: [coverMd5], references: [md5])
+  coverMd5     String?
+  PlaylistItem PlaylistItem[]
+}
+
+model Album {
+  id          Int     @id @default(autoincrement())
+  name        String
+  artistEntry Artist  @relation(fields: [artist], references: [name], onDelete: Cascade) /// The database entry for the albums artist
+  artist      String /// The id of the albums artist
+  tracks      Track[] @relation(name: "album")
+  coverEntry  Cover?  @relation(fields: [cover], references: [filepath]) /// The database entry for the albums cover
+  cover       String? /// The filepath of the albums cover
+
+  type  String  @default("album") /// ###DO NOT SET THIS. This is is used to provide a discriminating union for typescript.
+  Track Track[]
+
+  @@unique([name, artist])
+  @@unique([name, id]) // This is used to provide the name and id to the Track record, as otherwise linking it would not work or would require a lot of manual runtime mapping.
+}
+
+model Artist {
+  name              String  @id
+  tracks            Track[] @relation(name: "artist")
+  albumartistTracks Track[] @relation(name: "albumartist")
+  albums            Album[]
+  image             String? /// Currently unused. - The filepath to the artist's image.
+
+  type  String  @default("artist") /// ###DO NOT SET THIS. This is is used to provide a discriminating union for typescript.
+  Track Track[]
+}
+
+model Cover {
+  md5      String  @id
+  filepath String  @unique
+  album    Album[]
+  tracks   Track[]
+
+  type       String    @default("cover") /// ###DO NOT SET THIS. This is used to provide a discriminating union for typescript.
+  Playlist   Playlist? @relation(fields: [playlistId], references: [id])
+  playlistId Int?
+}
+
+model Playlist {
+  id          Int            @id @default(autoincrement())
+  name        String /// The name of the playlist. Does not need to be unique
+  items       PlaylistItem[] /// Those contain the tracks and their associated index in the playlist
+  description String? /// The description of the playlist, which gets displayed under its name
+
+  thumbnailCovers Cover[] /// The covers to be displayed in the playlist. Can be multiple covers of the tracks in the playlist or one user set image.
+
+  type String @default("playlist") /// ###DO NOT SET THIS. This is is used to provide a discriminating union for typescript.
+}
+
+/// A playlist contains tracks, but it can contain multiple of the same and needs to know their position inside the playlist. Thus we have another type for the playlist items.
+model PlaylistItem {
+  id    Int   @id @default(autoincrement())
+  track Track @relation(fields: [trackID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  index Int
+
+  playlist Playlist @relation(fields: [playlistID], references: [id], onDelete: Cascade)
+
+  trackID    Int
+  playlistID Int
+
+  type String @default("playlistItem") /// ###DO NOT SET THIS. This is is used to provide a discriminating union for typescript.
+}
