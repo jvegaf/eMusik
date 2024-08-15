@@ -8,13 +8,14 @@ interface LibraryState {
   tracks: Track[];
   sorted: Track[];
   isSorted: boolean;
+  toFixCount: number;
   setSorted: (tracks: Track[]) => void;
   addTrack: (track: Track) => void;
   updateTrack: (track: Track) => void;
   onOpen: () => void;
   onDrag: (files: FileWithPath[]) => void;
   getTrackFromId: (id: TrackId) => Track | undefined;
-  fixTracks: (trackIds: TrackId[]) => void;
+  fixTracks: (tracks: Track[]) => void;
   updateTags: (track: Track) => void;
   removeTracks: (trackIds: TrackId[]) => void;
   nextTrack: (prevId: TrackId) => TrackId;
@@ -24,12 +25,15 @@ const useLibraryStore = create<LibraryState>(set => ({
   tracks: [],
   sorted: [],
   isSorted: false,
+  toFixCount: 0,
   setSorted: sorted => set({ sorted, isSorted: true }),
   addTrack: track => set(state => ({ tracks: [...state.tracks, track] })),
   updateTrack: track => {
     set(state => ({ tracks: state.tracks.map(t => (t.id === track.id ? track : t)) }));
     const updateMessage = useAppStore.getState().updateMessage;
     updateMessage(`Track updated:      ${track.artist} - ${track.title} `);
+    const count = useLibraryStore.getState().toFixCount;
+    set({ toFixCount: count - 1 });
   },
   onOpen: async () => {
     const newTracks = await window.Main.openFolder();
@@ -44,10 +48,9 @@ const useLibraryStore = create<LibraryState>(set => ({
   getTrackFromId: id => {
     return useLibraryStore.getState().tracks.find(track => track.id === id);
   },
-  fixTracks: trackIds => {
-    trackIds.forEach(id => {
-      const track = useLibraryStore.getState().getTrackFromId(id);
-      if (!track) return;
+  fixTracks: tracks => {
+    set({ toFixCount: tracks.length });
+    tracks.forEach(track => {
       window.Main.fixTrack(track);
     });
   },

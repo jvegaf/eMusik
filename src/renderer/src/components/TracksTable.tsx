@@ -12,8 +12,9 @@ import {
   RowDoubleClickedEvent,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import log from 'electron-log/renderer';
 
 export const TracksTable = () => {
   // const { tracks, setTrackDetail, showCtxMenu, updatedTracks, setUpdatedTracks } = useAppState();
@@ -22,6 +23,7 @@ export const TracksTable = () => {
   const gridRef = useRef<AgGridReact>(null);
   const contentHeight = useAppStore(state => state.contentHeight);
   const showContextMenu = useAppStore(state => state.showContextMenu);
+  const toFixCount = useLibraryStore(state => state.toFixCount);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [gridApi, setGridApi] = useState<GridApi | null>(null);
   const [rowData, setRowData] = useState<Track[]>([]);
@@ -61,6 +63,10 @@ export const TracksTable = () => {
   //   if (!tracks.length) return;
   //   updateItems([...tracks]);
   // }, [tracks]);
+
+  useEffect(() => {
+    log.info('total count:', toFixCount);
+  }, [toFixCount]);
 
   const onGridReady = (params: GridReadyEvent) => {
     setGridApi(params.api);
