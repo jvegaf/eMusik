@@ -37,6 +37,7 @@ const useLibraryStore = create<LibraryState>(set => ({
   },
   onOpen: async () => {
     const newTracks = await window.Main.openFolder();
+    if (!newTracks) return;
     log.info('total tracks', newTracks.length);
     set({ tracks: newTracks });
   },
