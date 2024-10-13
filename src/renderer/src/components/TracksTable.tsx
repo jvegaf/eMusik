@@ -15,10 +15,12 @@ import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import log from 'electron-log/renderer';
 import usePlayerStore from '@renderer/stores/usePlayerStore';
+import { useNavigate } from 'react-router-dom';
 
 export const TracksTable = () => {
   // const { tracks, setTrackDetail, showCtxMenu, updatedTracks, setUpdatedTracks } = useAppState();
   const start = usePlayerStore(state => state.api.start);
+  const navigate = useNavigate();
   const tracks = useLibraryStore(state => state.tracks);
   const gridRef = useRef<AgGridReact>(null);
   const contentHeight = useAppStore(state => state.contentHeight);
@@ -77,8 +79,8 @@ export const TracksTable = () => {
   const onDblClick = useCallback((event: RowDoubleClickedEvent) => {
     event.event?.preventDefault();
     const { data } = event;
-    // navigate(`detail/${data.id}`);
-    start(data.id);
+    navigate(`detail/${data.id}`);
+    // start(data.id);
   }, []);
 
   const onShowCtxtMenu = useCallback((event: CellContextMenuEvent) => {
