@@ -27,7 +27,7 @@ import { Track } from '@preload/emusik';
 import { removeFile } from '../io/remover';
 
 export async function InitIpc(): Promise<void> {
-  log.info('ipc initialized');
+  log.info('[MAIN] ipc initialized');
 
   ipcMain.on(PERSIST, (_, track) => PersistTrack(track));
 
@@ -47,7 +47,7 @@ export async function InitIpc(): Promise<void> {
 
     const tracks = await Promise.all(files.map(async file => CreateTrack(file)).filter(t => t !== null));
 
-    log.info(' total tracks created: ', tracks.length);
+    log.info(' [MAIN] total tracks created: ', tracks.length);
 
     return tracks;
   });
@@ -55,13 +55,13 @@ export async function InitIpc(): Promise<void> {
   ipcMain.handle(OPEN_FILES, async (_, files: string[]) => {
     const tracks = await Promise.all(files.map(async file => CreateTrack(file)).filter(t => t !== null));
 
-    log.info(' total tracks created: ', tracks.length);
+    log.info(' [MAIN] total tracks created: ', tracks.length);
 
     return tracks;
   });
 
   ipcMain.on(FIX_TRACK, async (event: IpcMainEvent, track: Track) => {
-    log.info('track to fix: ', track.title);
+    log.info('[MAIN] track to fix: ', track.title);
     const updated = await FixTags(track);
     event.sender.send(TRACK_UPDATED, updated);
   });

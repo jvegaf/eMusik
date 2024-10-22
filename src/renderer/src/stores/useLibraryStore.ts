@@ -8,7 +8,6 @@ interface LibraryState {
   tracks: Track[];
   sorted: Track[];
   isSorted: boolean;
-  toFixCount: number;
   setSorted: (tracks: Track[]) => void;
   addTrack: (track: Track) => void;
   updateTrack: (track: Track) => void;
@@ -25,15 +24,13 @@ const useLibraryStore = create<LibraryState>(set => ({
   tracks: [],
   sorted: [],
   isSorted: false,
-  toFixCount: 0,
   setSorted: sorted => set({ sorted, isSorted: true }),
   addTrack: track => set(state => ({ tracks: [...state.tracks, track] })),
   updateTrack: track => {
     set(state => ({ tracks: state.tracks.map(t => (t.id === track.id ? track : t)) }));
+    log.info('[LIB_STORE] updated track: ', track.title);
     const updateMessage = useAppStore.getState().updateMessage;
     updateMessage(`Track updated:      ${track.artist} - ${track.title} `);
-    const count = useLibraryStore.getState().toFixCount;
-    set({ toFixCount: count - 1 });
   },
   onOpen: async () => {
     const newTracks = await window.Main.openFolder();
@@ -50,7 +47,6 @@ const useLibraryStore = create<LibraryState>(set => ({
     return useLibraryStore.getState().tracks.find(track => track.id === id);
   },
   fixTracks: tracks => {
-    set({ toFixCount: tracks.length });
     tracks.forEach(track => {
       window.Main.fixTrack(track);
     });
