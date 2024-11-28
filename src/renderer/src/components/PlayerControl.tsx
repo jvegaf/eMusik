@@ -16,7 +16,8 @@ export function PlayerControl() {
   return (
     <div className={classes.playerControls}>
       <ActionIcon
-        variant='transparent'
+        variant='filled'
+        radius='xl'
         color='rgba(23, 22, 22, 1)'
         size='xl'
         aria-label='Next'
@@ -49,8 +50,9 @@ export function PlayerControl() {
       </ActionIcon>
       <Space w='lg' />
       <ActionIcon
-        variant='transparent'
+        variant='filled'
         size='xl'
+        radius='xl'
         color='rgba(23, 22, 22, 1)'
         aria-label='Next'
         onClick={() => togglePlayPause()}

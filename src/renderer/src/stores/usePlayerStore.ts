@@ -4,6 +4,7 @@ import player from '../lib/player';
 
 import useLibraryStore from './useLibraryStore';
 import { PlayerStatus } from '@preload/emusik-player';
+import createSelectors from './selectors';
 
 type PlayerState = {
   playerStatus: PlayerStatus;
@@ -100,7 +101,7 @@ const usePlayerStore = create<PlayerState>((set, get) => ({
   },
 }));
 
-export default usePlayerStore;
+export default createSelectors(usePlayerStore);
 
 export function usePlayerAPI() {
   return usePlayerStore(state => state.api);

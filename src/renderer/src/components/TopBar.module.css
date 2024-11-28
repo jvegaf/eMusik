@@ -1,6 +1,6 @@
 .topbarRoot {
   height: 70px;
-  border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
+  /* border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4)); */
   width: 100%;
   display: flex;
   align-items: center;

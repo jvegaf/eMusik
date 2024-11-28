@@ -39,7 +39,7 @@ function createWindow(): void {
     mainWindow.show();
     if (process.platform === 'darwin') Menu.setApplicationMenu(AppMenu);
     mainWindow.maximize();
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
   });
 
   mainWindow.webContents.setWindowOpenHandler(details => {

@@ -1,3 +1,9 @@
+.trackSlider {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
 .trackRoot {
   --progress-height: 6px;
 
@@ -42,7 +48,7 @@
 
   &::before,
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     width: 0;
     height: 0;

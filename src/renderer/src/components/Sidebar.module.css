@@ -15,12 +15,16 @@
   @mixin light {
     background-color: var(--appbar-bg-light);
   }
-  border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
+  /* border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4)); */
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: var(--mantine-font-size-md);
   font-weight: var(--mantine-font-weight-bold);
+}
+
+.mainLink {
+  margin-bottom: 20px;
 }
 
 .mainLinkInner {

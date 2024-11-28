@@ -1,6 +1,7 @@
 import { BrowserWindow, dialog, ipcMain, IpcMainEvent, Menu, MenuItemConstructorOptions, PopupOptions } from 'electron';
 import log from 'electron-log/main';
 import {
+  ADD_ALL,
   ARTWORK_UPDATED,
   FIND_ARTWORK,
   FIX_COMMAND,
@@ -10,6 +11,7 @@ import {
   OPEN_FOLDER,
   PERSIST,
   PLAY_COMMAND,
+  READY,
   REMOVE_TRACK,
   SAVE_ARTWORK,
   SHOW_CONTEXT_MENU,
@@ -26,8 +28,17 @@ import PersistTrack from '../tag/saver';
 import { Track } from '@preload/emusik';
 import { removeFile } from '../io/remover';
 
+const DEV_SRC = '/home/th3g3ntl3man/Music/2411';
+
 export async function InitIpc(): Promise<void> {
   log.info('[MAIN] ipc initialized');
+
+  ipcMain.on(READY, async (event: IpcMainEvent) => {
+    const files = await GetFilesFrom(DEV_SRC);
+    const tracks = await Promise.all(files.map(async file => CreateTrack(file)).filter(t => t !== null));
+    log.info(' [MAIN] total tracks created: ', tracks.length);
+    event.sender.send(ADD_ALL, tracks);
+  });
 
   ipcMain.on(PERSIST, (_, track) => PersistTrack(track));
 
@@ -42,6 +53,8 @@ export async function InitIpc(): Promise<void> {
     });
 
     if (resultPath.canceled) return;
+
+    log.info(' [MAIN] folder selected: ', resultPath.filePaths[0]);
 
     const files = await GetFilesFrom(resultPath.filePaths[0]);
 

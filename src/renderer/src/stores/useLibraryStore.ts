@@ -3,6 +3,7 @@ import log from 'electron-log/renderer';
 import { Track, TrackId } from 'src/preload/emusik';
 import { FileWithPath } from '@mantine/dropzone';
 import useAppStore from './useAppStore';
+import createSelectors from './selectors';
 
 interface LibraryState {
   tracks: Track[];
@@ -10,6 +11,7 @@ interface LibraryState {
   isSorted: boolean;
   setSorted: (tracks: Track[]) => void;
   addTrack: (track: Track) => void;
+  addAll: (tracks: Track[]) => void;
   updateTrack: (track: Track) => void;
   onOpen: () => void;
   onDrag: (files: FileWithPath[]) => void;
@@ -26,6 +28,7 @@ const useLibraryStore = create<LibraryState>(set => ({
   isSorted: false,
   setSorted: sorted => set({ sorted, isSorted: true }),
   addTrack: track => set(state => ({ tracks: [...state.tracks, track] })),
+  addAll: tracks => set({ tracks: [...tracks] }),
   updateTrack: track => {
     set(state => ({ tracks: state.tracks.map(t => (t.id === track.id ? track : t)) }));
     log.info('[LIB_STORE] updated track: ', track.title);
@@ -73,4 +76,4 @@ const useLibraryStore = create<LibraryState>(set => ({
   },
 }));
 
-export default useLibraryStore;
+export default createSelectors(useLibraryStore);

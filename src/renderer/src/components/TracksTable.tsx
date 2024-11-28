@@ -1,5 +1,6 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import './TracksTable.css';
 import { Track } from '@preload/emusik';
 import useLibraryStore from '@renderer/stores/useLibraryStore';
 import useAppStore from '@renderer/stores/useAppStore';
@@ -12,15 +13,15 @@ import {
   RowDoubleClickedEvent,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import log from 'electron-log/renderer';
-// import usePlayerStore from '@renderer/stores/usePlayerStore';
+import { usePlayerAPI } from '@renderer/stores/usePlayerStore';
 import { useNavigate } from 'react-router-dom';
 import { TRACK_UPDATED } from '@preload/channels';
 
 export const TracksTable = () => {
   // const { tracks, setTrackDetail, showCtxMenu, updatedTracks, setUpdatedTracks } = useAppState();
-  // const start = usePlayerStore(state => state.api.start);
+  const start = usePlayerAPI().start;
   const navigate = useNavigate();
   const tracks = useLibraryStore(state => state.tracks);
   const gridRef = useRef<AgGridReact>(null);
@@ -79,8 +80,8 @@ export const TracksTable = () => {
   const onDblClick = useCallback((event: RowDoubleClickedEvent) => {
     event.event?.preventDefault();
     const { data } = event;
-    navigate(`detail/${data.id}`);
-    // start(data.id);
+    // navigate(`detail/${data.id}`);
+    start(data.id);
   }, []);
 
   const onShowCtxtMenu = useCallback((event: CellContextMenuEvent) => {
@@ -94,10 +95,17 @@ export const TracksTable = () => {
     // showCtxMenu(selected);
   }, []);
 
+  const onKeyPress = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      gridRef.current?.api.deselectAll();
+    }
+  }, []);
+
   return (
     <div
       style={gridStyle}
-      className='ag-theme-alpine-auto-dark'
+      className='ag-theme-alpine-auto-dark ag-theme-symphony'
+      onKeyDown={e => onKeyPress(e)}
     >
       <AgGridReact
         ref={gridRef}

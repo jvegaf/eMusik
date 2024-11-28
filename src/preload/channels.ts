@@ -16,3 +16,5 @@ export const TRACK_UPDATED = 'TRACK_UPDATED';
 export const UPDATE_MSG = 'UPDATE_MSG';
 export const ARTWORK_UPDATED = 'ARTWORK_UPDATED';
 export const REMOVE_TRACK = 'REMOVE_TRACK';
+export const ADD_ALL = 'ADD_ALL';
+export const READY = 'READY';

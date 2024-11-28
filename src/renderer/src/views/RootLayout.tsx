@@ -4,7 +4,6 @@ import classes from './RootLayout.module.css';
 import { useViewportSize } from '@mantine/hooks';
 import { useEffect } from 'react';
 import useAppStore from '../stores/useAppStore';
-import Sidebar from '@renderer/components/Sidebar';
 import TopBar from '@renderer/components/TopBar';
 
 export function RootLayout() {
@@ -18,7 +17,6 @@ export function RootLayout() {
   return (
     <div className={classes.rlayout}>
       <main className={classes.mainContainer}>
-        <Sidebar />
         <div className={classes.mainContent}>
           <TopBar />
           <Outlet />

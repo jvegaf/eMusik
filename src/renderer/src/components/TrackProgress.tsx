@@ -8,7 +8,7 @@ import { Track } from '@preload/emusik';
 import { ParseDuration } from '@preload/utils';
 
 type Props = {
-  trackPlaying: Track;
+  trackPlaying: Track | null;
 };
 
 export default function TrackProgress(props: Props) {
@@ -27,9 +27,10 @@ export default function TrackProgress(props: Props) {
   );
 
   useEffect(() => {
+    if (trackPlaying === null || !trackPlaying) return;
     const remain = Math.round(trackPlaying.duration! - elapsed);
     if (remain < 1) playerAPI.playNext();
-  }, [elapsed]);
+  }, [elapsed, trackPlaying]);
 
   const [tooltipTargetTime, setTooltipTargetTime] = useState<null | number>(null);
   const [tooltipX, setTooltipX] = useState<null | number>(null);
@@ -41,7 +42,7 @@ export default function TrackProgress(props: Props) {
 
       const percent = (offsetX / barWidth) * 100;
 
-      const time = (percent * trackPlaying.duration!) / 100;
+      const time = trackPlaying !== null ? (percent * trackPlaying.duration!) / 100 : 0;
 
       setTooltipTargetTime(time);
       setTooltipX(percent);
@@ -55,28 +56,30 @@ export default function TrackProgress(props: Props) {
   }, []);
 
   return (
-    <Slider.Root
-      min={0}
-      max={trackPlaying?.duration}
-      step={1}
-      value={[elapsed]}
-      onValueChange={jumpAudioTo}
-      className={styles.trackRoot}
-      onMouseMove={showTooltip}
-      onMouseLeave={hideTooltip}
-    >
-      <Slider.Track className={styles.trackProgress}>
-        <Slider.Range className={styles.trackRange} />
-        {tooltipX !== null && (
-          <div
-            className={styles.progressTooltip}
-            style={{ left: `${tooltipX}%` }}
-          >
-            {ParseDuration(tooltipTargetTime)}
-          </div>
-        )}
-      </Slider.Track>
-      <Slider.Thumb />
-    </Slider.Root>
+    <div className={styles.trackSlider}>
+      <Slider.Root
+        min={0}
+        max={trackPlaying?.duration}
+        step={1}
+        value={[elapsed]}
+        onValueChange={jumpAudioTo}
+        className={styles.trackRoot}
+        onMouseMove={showTooltip}
+        onMouseLeave={hideTooltip}
+      >
+        <Slider.Track className={styles.trackProgress}>
+          <Slider.Range className={styles.trackRange} />
+          {tooltipX !== null && (
+            <div
+              className={styles.progressTooltip}
+              style={{ left: `${tooltipX}%` }}
+            >
+              {ParseDuration(tooltipTargetTime)}
+            </div>
+          )}
+        </Slider.Track>
+        <Slider.Thumb />
+      </Slider.Root>
+    </div>
   );
 }

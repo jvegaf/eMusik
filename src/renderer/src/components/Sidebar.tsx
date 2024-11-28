@@ -1,11 +1,11 @@
-import { List, ThemeIcon, UnstyledButton, rem } from '@mantine/core';
+import { List, Space, ThemeIcon, UnstyledButton, rem } from '@mantine/core';
 import classes from './Sidebar.module.css';
 import { IconCircleCheck, IconCircleDashed, IconHeadphonesFilled } from '@tabler/icons-react';
 
 export default function Sidebar() {
   return (
     <div className={classes.sbContainer}>
-      <div className={classes.sbHeader}>Install</div>
+      <div className={classes.sbHeader}></div>
       <UnstyledButton className={classes.mainLink}>
         <div className={classes.mainLinkInner}>
           <IconHeadphonesFilled
