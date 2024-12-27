@@ -1,15 +1,16 @@
-.rlayout {
-  height: 100%;
+.root {
+  height: 100vh;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: hidden;
 }
 
-.mainContainer {
-  height: 100%;
+.main {
+  height: calc(100vh - 80px);
   width: 100%;
   display: flex;
   align-items: center;
@@ -19,7 +20,7 @@
   }
 }
 
-.topbar {
+.playerBar {
   height: 80px;
   width: 100%;
 }

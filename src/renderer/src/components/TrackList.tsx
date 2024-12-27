@@ -13,7 +13,6 @@ import {
 } from 'mantine-react-table';
 import classes from './TrackList.module.css';
 import { Track } from '@preload/emusik';
-import useAppStore from '../stores/useAppStore';
 import { Menu, Item, Separator, useContextMenu } from 'react-contexify';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,9 +23,14 @@ import { useHotkeys } from '@mantine/hooks';
 
 const MENU_ID = 'menu-id';
 
-export function TrackList() {
+type Props = {
+  data: Track[];
+  height: number;
+};
+
+function TrackList(props: Props) {
+  const { data, height } = props;
   const navigate = useNavigate();
-  const data = useLibraryStore(state => state.tracks);
   const setSorted = useLibraryStore(state => state.setSorted);
   const isSorted = useLibraryStore(state => state.isSorted);
   const sorted = useLibraryStore(state => state.sorted);
@@ -35,7 +39,6 @@ export function TrackList() {
   const start = usePlayerStore(state => state.api.start);
   const playingTrack = usePlayerStore(state => state.playingTrack);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
-  const contentHeight = useAppStore(state => state.contentHeight);
   const [sortedIndex, setSortedIndex] = useState<number>(0);
   const colorScheme = document.querySelector('html')!.getAttribute('data-mantine-color-scheme');
 
@@ -182,7 +185,7 @@ export function TrackList() {
     enableColumnActions: false,
     enableRowVirtualization: true,
     enableSorting: true,
-    mantineTableContainerProps: { style: { height: contentHeight } },
+    mantineTableContainerProps: { style: { height: height } },
 
     getRowId: row => row.id,
     mantineTableBodyRowProps: ({ row }) => ({
@@ -280,3 +283,5 @@ export function TrackList() {
     </div>
   );
 }
+
+export default TrackList;

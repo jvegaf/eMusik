@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export interface IViewportSize {
   width: number;
@@ -8,7 +8,7 @@ export interface IViewportSize {
 export const useViewportSize = (debounceTime = 250) => {
   const [viewportSize, setViewportSize] = useState<IViewportSize>({
     width: 0,
-    height: 0
+    height: 0,
   });
 
   const debounce = (fn: Function, ms: number) => {
@@ -26,15 +26,15 @@ export const useViewportSize = (debounceTime = 250) => {
     const debouncedHandleResize = debounce(() => {
       setViewportSize({
         width: window.innerWidth, //document.documentElement.clientWidth - doesn't work
-        height: window.innerHeight //document.documentElement.clientHeight - doesn't work
+        height: window.innerHeight, //document.documentElement.clientHeight - doesn't work
       });
     }, debounceTime);
 
-    window.addEventListener("resize", debouncedHandleResize);
+    window.addEventListener('resize', debouncedHandleResize);
 
     debouncedHandleResize();
 
-    return () => window.removeEventListener("resize", debouncedHandleResize);
+    return () => window.removeEventListener('resize', debouncedHandleResize);
   });
 
   return viewportSize;
